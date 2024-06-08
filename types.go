@@ -1,5 +1,7 @@
 package telegraph
 
+import "encoding/json"
+
 // Account represents a Telegraph account
 // See https://telegra.ph/api#Account
 type Account struct {
@@ -10,20 +12,42 @@ type Account struct {
 	PageCount   int    `json:"page_count"`
 }
 
-// Node represents a content node
+// Node represents a content node which can be a string (text node) or a NodeElement
 // See https://telegra.ph/api#Node
-type Node struct {
-	Tag      string      `json:"tag"`
-	Attrs    interface{} `json:"attrs,omitempty"`
-	Children []Node      `json:"children,omitempty"`
-}
+type Node interface{}
 
-// NodeElement represents a content node element
+// NodeElement represents a DOM element node
 // See https://telegra.ph/api#NodeElement
 type NodeElement struct {
 	Tag      string            `json:"tag"`
 	Attrs    map[string]string `json:"attrs,omitempty"`
-	Children []interface{}     `json:"children,omitempty"`
+	Children []Node            `json:"children,omitempty"`
+}
+
+// nodeWrapper is used to facilitate custom JSON marshaling for the Node type
+type nodeWrapper struct {
+	Text *string      `json:"text,omitempty"`
+	Elem *NodeElement `json:"elem,omitempty"`
+}
+
+// MarshalJSON implements custom JSON marshaling for the Node type
+func (n *NodeElement) MarshalJSON() ([]byte, error) {
+	wrapper := nodeWrapper{
+		Elem: n,
+	}
+	return json.Marshal(wrapper)
+}
+
+// UnmarshalJSON implements custom JSON unmarshalling for the Node type
+func (n *NodeElement) UnmarshalJSON(data []byte) error {
+	var wrapper nodeWrapper
+	if err := json.Unmarshal(data, &wrapper); err != nil {
+		return err
+	}
+	if wrapper.Elem != nil {
+		*n = *wrapper.Elem
+	}
+	return nil
 }
 
 // Page represents a Telegraph page

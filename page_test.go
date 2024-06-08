@@ -23,10 +23,10 @@ func TestCreatePage(t *testing.T) {
 	client.SetBaseURL(server.URL + "/")
 
 	content := []telegraph.Node{
-		{
+		telegraph.NodeElement{
 			Tag: "p",
 			Children: []telegraph.Node{
-				{
+				telegraph.NodeElement{
 					Tag: "Hello, world!",
 				},
 			},
@@ -62,10 +62,10 @@ func TestEditPage(t *testing.T) {
 	client.SetBaseURL(server.URL + "/")
 
 	content := []telegraph.Node{
-		{
+		telegraph.NodeElement{
 			Tag: "p",
 			Children: []telegraph.Node{
-				{
+				telegraph.NodeElement{
 					Tag: "Hello, world!",
 				},
 			},
