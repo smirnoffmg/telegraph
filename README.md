@@ -72,17 +72,8 @@ fmt.Printf("Account info: %+v\n", accountInfo)
 #### Create a Page
 
 ```go
-content := []telegraph.Node{
-    {
-        Tag: "p",
-        Children: []telegraph.Node{
-            {
-                Tag: "Hello, world!",
-            },
-        },
-    },
-}
-page, err := client.CreatePage(account.AccessToken, "Test Page", content, "Tester", "https://example.com")
+htmlContent := "<h3>Hello, world!</h3>"
+page, err := client.CreatePage(account.AccessToken, "Test Page", htmlContent, "Tester", "https://example.com")
 if err != nil {
     log.Fatalf("Failed to create page: %v", err)
 }
@@ -91,7 +82,7 @@ fmt.Printf("Created page: %+v\n", page)
 
 ### More Examples
 
-For more examples on how to use this client, please refer to the [telegraph_example.go](telegraph_example.go) file.
+For more examples on how to use this client, please refer to the [examples](examples) file.
 
 ## Testing
 

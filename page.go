@@ -25,6 +25,15 @@ func (c *Client) CreatePage(accessToken, title string, content []Node, authorNam
 	return &result.Result, nil
 }
 
+func (c *Client) CreatePageFromHTML(accessToken, title, htmlContent, authorName, authorURL string) (*Page, error) {
+	content, err := HTMLToContent(htmlContent)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert HTML to content: %w", err)
+	}
+
+	return c.CreatePage(accessToken, title, content, authorName, authorURL)
+}
+
 // EditPage edits an existing page on Telegraph
 // See https://telegra.ph/api#editPage
 func (c *Client) EditPage(accessToken, path, title string, content []Node, authorName, authorURL string) (*Page, error) {
