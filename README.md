@@ -15,6 +15,7 @@ This repository contains a Go client library for the [Telegraph API](https://tel
 - **Statistics**: Retrieve view statistics for Telegraph pages.
 - **Customizable**: Easy to extend and customize for specific needs.
 - **Debug Mode**: Enable detailed logging for debugging purposes.
+- **HTML Support**: Create pages directly from HTML content.
 
 ## Installation
 
@@ -82,7 +83,7 @@ fmt.Printf("Created page: %+v\n", page)
 
 ### More Examples
 
-For more examples on how to use this client, please refer to the [examples](examples) file.
+For more examples on how to use this client, please refer to the [examples](examples) directory.
 
 ## Testing
 
