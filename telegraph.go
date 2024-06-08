@@ -6,49 +6,44 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 )
 
-const (
-	// DefaultBaseURL is the default base URL for the Telegraph API
-	DefaultBaseURL = "https://api.telegra.ph/"
-	// RequestTimeout is the timeout duration for HTTP requests
-	RequestTimeout = 10 * time.Second
-)
-
-// Client is a HTTP client for the Telegraph API
+// Client represents a client for the Telegraph API.
 type Client struct {
 	httpClient *http.Client
 	baseURL    string
 	debug      bool
 }
 
-// NewClient creates a new Telegraph API client with an optional custom http.Client and base URL
-func NewClient(customClient ...*http.Client) *Client {
-	client := &Client{
-		httpClient: &http.Client{
-			Timeout: RequestTimeout,
-		},
-		baseURL: DefaultBaseURL,
-		debug:   false,
+// NewClient creates a new Telegraph API client.
+func NewClient(httpClient *http.Client) *Client {
+	return &Client{
+		httpClient: httpClient,
+		baseURL:    "https://api.telegra.ph/",
 	}
-	if len(customClient) > 0 && customClient[0] != nil {
-		client.httpClient = customClient[0]
-	}
-	return client
 }
 
-// SetBaseURL sets a custom base URL for the client
+// SetBaseURL sets the base URL for API requests.
 func (c *Client) SetBaseURL(baseURL string) {
 	c.baseURL = baseURL
 }
 
-// SetDebug sets the debug mode for the client
+// BaseURL returns the base URL for API requests.
+func (c *Client) BaseURL() string {
+	return c.baseURL
+}
+
+// SetDebug enables or disables debug mode.
 func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-// doRequest sends a HTTP request to the Telegraph API
+// Debug returns whether debug mode is enabled.
+func (c *Client) Debug() bool {
+	return c.debug
+}
+
+// doRequest sends a HTTP request to the Telegraph API.
 func (c *Client) doRequest(method, endpoint string, body interface{}, result interface{}) error {
 	url := c.baseURL + endpoint
 
