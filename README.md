@@ -1,7 +1,7 @@
 
 # Telegraph API Client in Go
 
-![Go](https://img.shields.io/badge/Go-1.16%2B-blue.svg)
+![Go](https://img.shields.io/badge/Go-1.22%2B-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Build Status](https://github.com/smirnoffmg/telegraph/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/github/smirnoffmg/telegraph/graph/badge.svg?token=RSZHRNUHBX)](https://codecov.io/github/smirnoffmg/telegraph)
