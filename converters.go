@@ -39,14 +39,10 @@ var allowedAttrs = map[string]struct{}{
 	"href": {}, "src": {},
 }
 
-// domToNode converts an HTML node to a Node
+// domToNode converts an HTML node to a telegraph.Node
 func domToNode(n *html.Node) interface{} {
 	if n.Type == html.TextNode {
-		textContent := strings.TrimSpace(n.Data)
-		if textContent != "" {
-			return textContent
-		}
-		return nil
+		return n.Data
 	}
 
 	if n.Type != html.ElementNode {
@@ -79,7 +75,7 @@ func domToNode(n *html.Node) interface{} {
 	return nodeElement
 }
 
-// HTMLToContent transforms HTML string to a slice of Nodes
+// HTMLToContent transforms HTML string to a slice of telegraph.Nodes
 func HTMLToContent(htmlStr string) ([]Node, error) {
 	doc, err := html.Parse(strings.NewReader(htmlStr))
 	if err != nil {

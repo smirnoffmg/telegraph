@@ -7,7 +7,7 @@ import (
 	"github.com/smirnoffmg/telegraph"
 )
 
-const testContentJSON = `[{"tag":"p","children":["Hello,",{"tag":"b","children":["world"]},"! This is an",{"tag":"a","attrs":{"href":"https://example.com"},"children":["example link"]},"."]}]`
+const testContentJSON = `[{"tag":"p","children":["Hello, ",{"tag":"b","children":["world"]},"! This is an ",{"tag":"a","attrs":{"href":"https://example.com"},"children":["example link"]},"."]}]`
 
 func TestHTMLToContent(t *testing.T) {
 	htmlStr := `<p>Hello, <b>world</b>! This is an <a href="https://example.com">example link</a>.</p>`
