@@ -1,6 +1,9 @@
 package telegraph
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"errors"
+)
 
 // Account represents a Telegraph account
 // See https://telegra.ph/api#Account
@@ -32,21 +35,47 @@ type nodeWrapper struct {
 
 // MarshalJSON implements custom JSON marshaling for the Node type
 func (n *NodeElement) MarshalJSON() ([]byte, error) {
-	wrapper := nodeWrapper{
-		Elem: n,
+	type nodeElementAlias NodeElement // Define an alias to prevent infinite recursion
+	wrapper := struct {
+		*nodeElementAlias
+	}{
+		nodeElementAlias: (*nodeElementAlias)(n),
 	}
-	return json.Marshal(wrapper)
+	return json.Marshal(&wrapper)
 }
 
 // UnmarshalJSON implements custom JSON unmarshalling for the Node type
 func (n *NodeElement) UnmarshalJSON(data []byte) error {
-	var wrapper nodeWrapper
-	if err := json.Unmarshal(data, &wrapper); err != nil {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
-	if wrapper.Elem != nil {
-		*n = *wrapper.Elem
+
+	tag, ok := raw["tag"].(string)
+	if !ok {
+		return errors.New("missing or invalid 'tag' field")
 	}
+	n.Tag = tag
+
+	if attrsRaw, ok := raw["attrs"].(map[string]interface{}); ok {
+		n.Attrs = make(map[string]string)
+		for key, value := range attrsRaw {
+			if strValue, ok := value.(string); ok {
+				n.Attrs[key] = strValue
+			}
+		}
+	}
+
+	if childrenRaw, ok := raw["children"].([]interface{}); ok {
+		var children []Node
+		for _, childRaw := range childrenRaw {
+			if childStr, ok := childRaw.(string); ok {
+				children = append(children, childStr)
+			}
+		}
+		n.Children = children
+	}
+
 	return nil
 }
 
